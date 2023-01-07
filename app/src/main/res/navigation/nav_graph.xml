@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.glownia.maciej.usersapp.FirstFragment"
+        android:name="com.glownia.maciej.usersapp.ui.fragments.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -17,12 +17,15 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.glownia.maciej.usersapp.SecondFragment"
+        android:name="com.glownia.maciej.usersapp.ui.fragments.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.glownia.maciej.usersapp.models.ResultGithub" />
     </fragment>
 </navigation>
