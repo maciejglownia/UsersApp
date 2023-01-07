@@ -14,11 +14,13 @@ import com.glownia.maciej.usersapp.adapters.UsersAdapter
 import com.glownia.maciej.usersapp.databinding.FragmentFirstBinding
 import com.glownia.maciej.usersapp.ui.viewmodels.MainViewModel
 import com.glownia.maciej.usersapp.utils.NetworkResult
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * Displays list with users
  */
+@AndroidEntryPoint
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
