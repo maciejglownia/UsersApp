@@ -2,6 +2,7 @@ package com.glownia.maciej.usersapp.di
 
 import com.glownia.maciej.usersapp.data.network.UsersApi
 import com.glownia.maciej.usersapp.utils.Constants.Companion.BASE_URL
+import com.glownia.maciej.usersapp.utils.Constants.Companion.BASE_URL_TWO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,6 +11,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -33,12 +35,27 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    @Named("Github")
     fun provideRetrofitInstance(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    @Named("Dailymotion")
+    fun provideRetrofitInstanceTwo(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory,
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL_TWO)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()

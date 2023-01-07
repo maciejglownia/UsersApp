@@ -78,7 +78,7 @@ class FirstFragment : Fragment() {
 
     private fun requestApiData() {
         Log.d("FirstFragment", "requestApiData called!")
-        mainViewModel.getUsersGithub()
+        mainViewModel.getUsersGithubDailymotion()
         mainViewModel.usersGithubResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
