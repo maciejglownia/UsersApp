@@ -1,8 +1,11 @@
 package com.glownia.maciej.usersapp.di
 
-import com.glownia.maciej.usersapp.data.network.UsersApi
-import com.glownia.maciej.usersapp.utils.Constants.Companion.BASE_URL
-import com.glownia.maciej.usersapp.utils.Constants.Companion.BASE_URL_TWO
+import com.glownia.maciej.usersapp.data.network.DailymotionApi
+import com.glownia.maciej.usersapp.data.network.GithubApi
+import com.glownia.maciej.usersapp.utils.Constants.Companion.BASE_URL_DAILYMOTION
+import com.glownia.maciej.usersapp.utils.Constants.Companion.BASE_URL_GITHUB
+import com.glownia.maciej.usersapp.utils.Dailymotion
+import com.glownia.maciej.usersapp.utils.Github
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +14,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -35,35 +37,41 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    @Named("Github")
-    fun provideRetrofitInstance(
+    @Github
+    fun provideRetrofitInstanceGithub(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
+            .baseUrl(BASE_URL_GITHUB)
             .addConverterFactory(gsonConverterFactory)
+            .client(okHttpClient)
             .build()
     }
 
     @Singleton
     @Provides
-    @Named("Dailymotion")
-    fun provideRetrofitInstanceTwo(
+    @Dailymotion
+    fun provideRetrofitInstanceDailymotion(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL_TWO)
-            .client(okHttpClient)
+            .baseUrl(BASE_URL_DAILYMOTION)
             .addConverterFactory(gsonConverterFactory)
+            .client(okHttpClient)
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): UsersApi {
-        return retrofit.create(UsersApi::class.java)
+    fun provideApiServiceGithub(@Github retrofit: Retrofit): GithubApi {
+        return retrofit.create(GithubApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideApiServiceDailymotion(@Dailymotion retrofit: Retrofit): DailymotionApi {
+        return retrofit.create(DailymotionApi::class.java)
     }
 }
