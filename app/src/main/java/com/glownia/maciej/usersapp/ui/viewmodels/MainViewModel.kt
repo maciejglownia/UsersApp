@@ -5,12 +5,14 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.*
 import com.glownia.maciej.usersapp.data.Repository
-import com.glownia.maciej.usersapp.data.database.entities.UsersEntity
+import com.glownia.maciej.usersapp.data.database.entities.UsersDailymotionEntity
+import com.glownia.maciej.usersapp.data.database.entities.UsersGithubEntity
 import com.glownia.maciej.usersapp.models.UsersDailymotion
 import com.glownia.maciej.usersapp.models.UsersGithub
 import com.glownia.maciej.usersapp.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import retrofit2.Response
@@ -25,60 +27,78 @@ class MainViewModel @Inject constructor(
     var recyclerViewState: Parcelable? = null
 
     /** Room Database */
-    val readUsersGithub: LiveData<List<UsersEntity>> = repository.local.readUsersGithub().asLiveData()
+    val readUsersGithub: LiveData<List<UsersGithubEntity>> =
+        repository.local.readUsersGithub().asLiveData()
+    val readUsersDailymotion: LiveData<List<UsersDailymotionEntity>> =
+        repository.local.readUsersDailymotion().asLiveData()
 
-    private fun insertUsersGithub(usersEntity: UsersEntity) =
+    private fun insertUsersGithub(usersGithubEntity: UsersGithubEntity) =
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertUsersGithub(usersEntity)
+            repository.local.insertUsersGithub(usersGithubEntity)
+        }
+
+    private fun insertUsersDailymotion(usersDailymotionEntity: UsersDailymotionEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertUsersDailymotion(usersDailymotionEntity)
         }
 
     /** Retrofit */
     var usersGithubResponse: MutableLiveData<NetworkResult<UsersGithub>> = MutableLiveData()
-    var usersDailymotionResponse: MutableLiveData<NetworkResult<UsersDailymotion>> = MutableLiveData()
+    private var usersDailymotionResponse: MutableLiveData<NetworkResult<UsersDailymotion>> =
+        MutableLiveData()
 
-    fun getUsersGithubDailymotion() = viewModelScope.launch {
-        getUsersGithubDailymotionSafeCall()
+    fun getUsersFromApis() {
+        getUsersFromApisSafeCall()
     }
 
-    private suspend fun getUsersGithubDailymotionSafeCall() {
+    private fun getUsersFromApisSafeCall() = viewModelScope.launch {
         usersGithubResponse.value = NetworkResult.Loading()
         try {
-            val responseUsersGithub = repository.remote.getUsersGithub()
-            val responseUsersDailymotion = repository.remote.getUsersDailymotion()
-            Log.i("MainViewModel", "getUsersSafeCall: getUsersGithub()")
-            usersGithubResponse.value = handleUsersGithubResponse(responseUsersGithub)
-            usersDailymotionResponse.value = handleUsersDailymotionResponse(responseUsersDailymotion)
-            val usersGithub = usersGithubResponse.value!!.data
-            val usersDailymotion = usersDailymotionResponse.value!!.data
-            if (usersGithub != null) {
-                if (usersDailymotion != null) {
-                    offlineCacheUsers(usersGithub, usersDailymotion)
-                }
-                Log.i("MainViewModel", "getUsersGithubSafeCall: offlineCacheUsersGithub()")
-            }
+//            val responseUsersGithub = async { repository.remote.getUsersGithub() }
+            val responseUsersDailymotion = async { repository.remote.getUsersDailymotion() }
+            Log.i("MainViewModel", "getUsersFromApisSafeCall is trying...")
+//            val github = responseUsersGithub.await()
+            val dailymotion = responseUsersDailymotion.await()
+
+//            usersGithubResponse.value = handleUsersGithubResponse(github)
+            usersDailymotionResponse.value = handleUsersDailymotionResponse(dailymotion)
+
+            offlineCacheUsersGithub()
+            offlineCacheUsersDailymotion()
         } catch (e: Exception) {
             usersGithubResponse.value = NetworkResult.Error("Users not found.")
-            Log.i("MainViewModel", "getUsersGithubSafeCall: Exception")
+            Log.i("MainViewModel", "getUsersFromApisSafeCall: Exception")
 
         } catch (e: HttpException) {
             usersGithubResponse.value = NetworkResult.Error("No Internet connection")
-            Log.i("MainViewModel", "getUsersGithubSafeCall: Http exception")
+            Log.i("MainViewModel", "getUsersFromApisSafeCall: Http exception")
         }
     }
 
-
-    private fun offlineCacheUsers(usersGithub: UsersGithub, usersDailymotion: UsersDailymotion) {
-        val usersEntity = UsersEntity(usersGithub, usersDailymotion)
-        insertUsersGithub(usersEntity)
+    private fun offlineCacheUsersDailymotion() {
+        val usersDailymotion = usersDailymotionResponse.value!!.data
+        if (usersDailymotion != null) {
+            val usersDailymotionEntity = UsersDailymotionEntity(usersDailymotion)
+            insertUsersDailymotion(usersDailymotionEntity)
+            Log.i("MainViewModel", "offlineCacheUsersDailymotion()")
+        }
     }
 
+    private fun offlineCacheUsersGithub() {
+        val usersGithub = usersGithubResponse.value!!.data
+        if (usersGithub != null) {
+            val usersGithubEntity = UsersGithubEntity(usersGithub)
+            insertUsersGithub(usersGithubEntity)
+            Log.i("MainViewModel", "offlineCacheUsersGithub()")
+        }
+    }
 
     private fun handleUsersGithubResponse(response: Response<UsersGithub>): NetworkResult<UsersGithub> {
         return when {
             response.message().toString().contains("timeout") -> {
                 NetworkResult.Error("Timeout")
             }
-            response.body()!!.resultsUsersGithub.isEmpty() -> {
+            response.body()!!.isEmpty() -> {
                 NetworkResult.Error("Users not found.")
             }
             response.isSuccessful -> {
@@ -90,12 +110,13 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
     private fun handleUsersDailymotionResponse(responseUsersDailymotion: Response<UsersDailymotion>): NetworkResult<UsersDailymotion>? {
         return when {
             responseUsersDailymotion.message().toString().contains("timeout") -> {
                 NetworkResult.Error("Timeout")
             }
-            responseUsersDailymotion.body()!!.results.isEmpty() -> {
+            responseUsersDailymotion.body()!!.resultsUserDailymotion.isEmpty() -> {
                 NetworkResult.Error("Users not found.")
             }
             responseUsersDailymotion.isSuccessful -> {
