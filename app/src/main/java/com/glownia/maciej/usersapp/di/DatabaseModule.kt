@@ -3,6 +3,7 @@ package com.glownia.maciej.usersapp.di
 import android.content.Context
 import androidx.room.Room
 import com.glownia.maciej.usersapp.data.database.UsersDatabase
+import com.glownia.maciej.usersapp.utils.Constants.Companion.USERS_DATABASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +22,7 @@ object DatabaseModule {
     ) = Room.databaseBuilder(
         context,
         UsersDatabase::class.java,
-        "users_database"
+        USERS_DATABASE
     ).build()
 
     @Singleton
