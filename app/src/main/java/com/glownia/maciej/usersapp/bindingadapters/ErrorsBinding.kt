@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import com.glownia.maciej.usersapp.data.database.entities.UsersEntity
+import com.glownia.maciej.usersapp.data.database.entities.UsersDailymotionEntity
 import com.glownia.maciej.usersapp.models.UsersGithub
 import com.glownia.maciej.usersapp.utils.NetworkResult
 
@@ -17,7 +17,7 @@ class ErrorsBinding {
         fun handleReadDataErrors(
             view: View,
             apiResponse: NetworkResult<UsersGithub>?,
-            database: List<UsersEntity>?
+            database: List<UsersDailymotionEntity>?
         ){
             when (view){
                 is ImageView ->{

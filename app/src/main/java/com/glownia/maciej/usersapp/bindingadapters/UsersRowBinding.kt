@@ -23,7 +23,7 @@ class UsersRowBinding {
                         FirstFragmentDirections.actionFirstFragmentToSecondFragment(users)
                     singleRow.findNavController().navigate(action)
                 } catch (e: Exception) {
-                    Log.d("onQuoteClickListener", e.toString())
+                    Log.d("onUserClickListener", e.toString())
                 }
             }
         }
