@@ -3,10 +3,11 @@ package com.glownia.maciej.usersapp.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.glownia.maciej.usersapp.data.database.entities.UsersEntity
+import com.glownia.maciej.usersapp.data.database.entities.UsersDailymotionEntity
+import com.glownia.maciej.usersapp.data.database.entities.UsersGithubEntity
 
 @Database(
-    entities = [UsersEntity::class],
+    entities = [UsersDailymotionEntity::class, UsersGithubEntity::class],
     version = 1,
     exportSchema = false
 )
