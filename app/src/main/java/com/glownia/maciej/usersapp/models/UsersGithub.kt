@@ -6,7 +6,6 @@ package com.glownia.maciej.usersapp.models
  *
  * @see [ResultGithub] to know what exactly data we get.
  */
-
-class UsersGithub(
+data class UsersGithub(
     val resultsUsersGithub: List<ResultGithub>
 )

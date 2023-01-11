@@ -54,13 +54,15 @@ class MainViewModel @Inject constructor(
     private fun getUsersFromApisSafeCall() = viewModelScope.launch {
         usersGithubResponse.value = NetworkResult.Loading()
         try {
-            val responseUsersGithub = async { repository.remote.getUsersGithub() }
+            val responseUsersGithub = repository.remote.getUsersGithub()
             val responseUsersDailymotion = async { repository.remote.getUsersDailymotion() }
+
             Log.i("MainViewModel", "getUsersFromApisSafeCall is trying...")
-            val github = responseUsersGithub.await()
+
+//            val github = responseUsersGithub.await()
             val dailymotion = responseUsersDailymotion.await()
 
-            handleDataResponses(github, dailymotion)
+            handleDataResponses(responseUsersGithub, dailymotion)
             saveDataFromApiIntoDatabase()
         } catch (e: Exception) {
             usersGithubResponse.value = NetworkResult.Error("Users not found.")
@@ -88,7 +90,7 @@ class MainViewModel @Inject constructor(
 
     private fun offlineCacheUsersGithub() {
         val usersGithub = usersGithubResponse.value!!.data
-        if (usersGithub != null && usersGithub.isNotEmpty()) {
+        if (usersGithub != null) {
             val usersGithubEntity = UsersGithubEntity(usersGithub)
             insertUsersGithub(usersGithubEntity)
             Log.i("MainViewModel", "offlineCacheUsersGithub()")

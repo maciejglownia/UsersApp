@@ -10,22 +10,26 @@ class UsersTypeConverter {
 
     var gson = Gson()
 
+    // Serialization
     @TypeConverter
-    fun usersGithubToString(usersGithub: UsersGithub): String {
+    fun usersGithubToString(usersGithub: List<UsersGithub>): String {
         return gson.toJson(usersGithub)
     }
 
+    // Deserialization
     @TypeConverter
-    fun stringToUsersGithub(data: String): UsersGithub {
-        val listType = object : TypeToken<UsersGithub>() {}.type
+    fun stringToUsersGithub(data: String): List<UsersGithub> {
+        val listType = object : TypeToken<List<UsersGithub>>() {}.type
         return gson.fromJson(data, listType)
     }
 
+    // Serialization
     @TypeConverter
     fun usersDailymotionToString(usersDailymotion: UsersDailymotion): String {
         return gson.toJson(usersDailymotion)
     }
 
+    // Deserialization
     @TypeConverter
     fun stringToUsersDailymotion(data: String): UsersDailymotion {
         val listType = object : TypeToken<UsersDailymotion>() {}.type

@@ -2,11 +2,11 @@ package com.glownia.maciej.usersapp.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +14,7 @@ import com.glownia.maciej.usersapp.adapters.UsersAdapter
 import com.glownia.maciej.usersapp.databinding.FragmentFirstBinding
 import com.glownia.maciej.usersapp.ui.viewmodels.MainViewModel
 import com.glownia.maciej.usersapp.utils.NetworkResult
+import com.glownia.maciej.usersapp.utils.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -64,10 +65,10 @@ class FirstFragment : Fragment() {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
+            mainViewModel.readUsersGithub.observeOnce(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
                     Log.d("FirstFragment", "readDatabase called!")
-                    myAdapter.setData(database.first().usersGithub)
+                    myAdapter.setData(database.first().usersGithub[0])
                     // TODO: Hide loading
                 } else {
                     requestApiData()
@@ -78,12 +79,12 @@ class FirstFragment : Fragment() {
 
     private fun requestApiData() {
         Log.d("FirstFragment", "requestApiData called!")
-        mainViewModel.getUsersGithubDailymotion()
+        mainViewModel.getUsersFromApis()
         mainViewModel.usersGithubResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
                     // TODO: Hide loading
-                    response.data?.let { myAdapter.setData(it) }
+                    response.data?.let { myAdapter }
                 }
                 is NetworkResult.Error -> {
                     Log.d("FirstFragment", "requestApiData error!")
@@ -107,7 +108,7 @@ class FirstFragment : Fragment() {
         lifecycleScope.launch {
             mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    myAdapter.setData(database.first().usersGithub)
+                    myAdapter.setData(database.first().usersGithub[0])
                 }
             }
         }
