@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.glownia.maciej.usersapp.data.database.entities.UsersDailymotionEntity
-import com.glownia.maciej.usersapp.models.UsersGithub
+import com.glownia.maciej.usersapp.models.ResultGithub
 import com.glownia.maciej.usersapp.utils.NetworkResult
 
 class ErrorsBinding {
@@ -16,7 +16,7 @@ class ErrorsBinding {
         @JvmStatic
         fun handleReadDataErrors(
             view: View,
-            apiResponse: NetworkResult<UsersGithub>?,
+            apiResponse: NetworkResult<ResultGithub>?,
             database: List<UsersDailymotionEntity>?
         ){
             when (view){

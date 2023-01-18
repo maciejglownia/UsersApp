@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.glownia.maciej.usersapp.databinding.SingleRowBinding
 import com.glownia.maciej.usersapp.models.ResultGithub
-import com.glownia.maciej.usersapp.models.UsersGithub
 import com.glownia.maciej.usersapp.utils.UsersDiffUtil
 
 class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
@@ -37,11 +36,11 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
         return users.size
     }
 
-    fun setData(newData: UsersGithub) {
+    fun setData(newData: List<ResultGithub>) {
         val usersDiffUtil =
-            UsersDiffUtil(users, newData.resultsUsersGithub)
+            UsersDiffUtil(users, newData)
         val diffUtilResult = DiffUtil.calculateDiff(usersDiffUtil)
-        users = newData.resultsUsersGithub
+        users = newData
         diffUtilResult.dispatchUpdatesTo(this)
     }
 }

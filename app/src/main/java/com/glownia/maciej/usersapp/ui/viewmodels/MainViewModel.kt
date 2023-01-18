@@ -7,8 +7,8 @@ import androidx.lifecycle.*
 import com.glownia.maciej.usersapp.data.Repository
 import com.glownia.maciej.usersapp.data.database.entities.UsersDailymotionEntity
 import com.glownia.maciej.usersapp.data.database.entities.UsersGithubEntity
+import com.glownia.maciej.usersapp.models.ResultGithub
 import com.glownia.maciej.usersapp.models.UsersDailymotion
-import com.glownia.maciej.usersapp.models.UsersGithub
 import com.glownia.maciej.usersapp.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
         }
 
     /** Retrofit */
-    var usersGithubResponse: MutableLiveData<NetworkResult<List<UsersGithub>>> = MutableLiveData()
+    var usersGithubResponse: MutableLiveData<NetworkResult<List<ResultGithub>>> = MutableLiveData()
     private var usersDailymotionResponse: MutableLiveData<NetworkResult<UsersDailymotion>> =
         MutableLiveData()
 
@@ -54,15 +54,15 @@ class MainViewModel @Inject constructor(
     private fun getUsersFromApisSafeCall() = viewModelScope.launch {
         usersGithubResponse.value = NetworkResult.Loading()
         try {
-            val responseUsersGithub = repository.remote.getUsersGithub()
+            val responseUsersGithub = async { repository.remote.getUsersGithub() }
             val responseUsersDailymotion = async { repository.remote.getUsersDailymotion() }
 
             Log.i("MainViewModel", "getUsersFromApisSafeCall is trying...")
 
-//            val github = responseUsersGithub.await()
+            val github = responseUsersGithub.await()
             val dailymotion = responseUsersDailymotion.await()
 
-            handleDataResponses(responseUsersGithub, dailymotion)
+            handleDataResponses(github, dailymotion)
             saveDataFromApiIntoDatabase()
         } catch (e: Exception) {
             usersGithubResponse.value = NetworkResult.Error("Users not found.")
@@ -75,7 +75,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleDataResponses(
-        github: Response<List<UsersGithub>>,
+        github: Response<List<ResultGithub>>,
         dailymotion: Response<UsersDailymotion>,
     ) {
         usersGithubResponse.value = handleUsersGithubResponse(github)
@@ -106,7 +106,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun handleUsersGithubResponse(responseUsersGithub: Response<List<UsersGithub>>): NetworkResult<List<UsersGithub>> {
+    private fun handleUsersGithubResponse(responseUsersGithub: Response<List<ResultGithub>>): NetworkResult<List<ResultGithub>> {
         return when {
             responseUsersGithub.message().toString().contains("timeout") -> {
                 NetworkResult.Error("Timeout")

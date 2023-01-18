@@ -14,7 +14,6 @@ import com.glownia.maciej.usersapp.adapters.UsersAdapter
 import com.glownia.maciej.usersapp.databinding.FragmentFirstBinding
 import com.glownia.maciej.usersapp.ui.viewmodels.MainViewModel
 import com.glownia.maciej.usersapp.utils.NetworkResult
-import com.glownia.maciej.usersapp.utils.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -65,10 +64,10 @@ class FirstFragment : Fragment() {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readUsersGithub.observeOnce(viewLifecycleOwner) { database ->
+            mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
                     Log.d("FirstFragment", "readDatabase called!")
-                    myAdapter.setData(database.first().usersGithub[0])
+                    myAdapter.setData(database.first().usersGithub)
                     // TODO: Hide loading
                 } else {
                     requestApiData()
@@ -108,7 +107,7 @@ class FirstFragment : Fragment() {
         lifecycleScope.launch {
             mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    myAdapter.setData(database.first().usersGithub[0])
+                    myAdapter.setData(database.first().usersGithub)
                 }
             }
         }

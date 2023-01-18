@@ -1,6 +1,7 @@
 package com.glownia.maciej.usersapp.models
 
 import android.os.Parcelable
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -15,7 +16,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ResultGithub(
-    @SerializedName("login") val username: String,
-    @SerializedName("avatar_url") val avatar: String,
-    @SerializedName("url") val url: String,
+    @SerializedName("login") var username: String? = null,
+    @SerializedName("avatar_url") var avatar: String? = null,
+    @SerializedName("url") var url: String? = null,
 ) : Parcelable

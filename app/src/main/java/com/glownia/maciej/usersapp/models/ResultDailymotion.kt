@@ -1,6 +1,7 @@
 package com.glownia.maciej.usersapp.models
 
 import android.os.Parcelable
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -14,6 +15,7 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ResultDailymotion(
-    @SerializedName("id") val id: String,
-    @SerializedName("screenname") val screenName: String,
+    @PrimaryKey
+    @SerializedName("id") var id: String? = null,
+    @SerializedName("screenname") var screenName: String? = null,
 ) : Parcelable
