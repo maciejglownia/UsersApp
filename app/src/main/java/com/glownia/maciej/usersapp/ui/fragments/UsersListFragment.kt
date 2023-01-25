@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.glownia.maciej.usersapp.adapters.UsersAdapter
-import com.glownia.maciej.usersapp.databinding.FragmentFirstBinding
+import com.glownia.maciej.usersapp.databinding.FragmentUsersListBinding
 import com.glownia.maciej.usersapp.ui.viewmodels.MainViewModel
 import com.glownia.maciej.usersapp.utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
  * Displays list with users
  */
 @AndroidEntryPoint
-class FirstFragment : Fragment() {
+class UsersListFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentUsersListBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
@@ -43,9 +43,9 @@ class FirstFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentUsersListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
 
@@ -56,6 +56,7 @@ class FirstFragment : Fragment() {
         }
         return binding.root
     }
+
     private fun setupRecyclerView() {
         binding.recyclerView.adapter = myAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

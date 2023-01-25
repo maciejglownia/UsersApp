@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import coil.load
 import com.glownia.maciej.usersapp.R
 import com.glownia.maciej.usersapp.models.ResultGithub
-import com.glownia.maciej.usersapp.ui.fragments.FirstFragmentDirections
+import com.glownia.maciej.usersapp.ui.fragments.UsersListFragmentDirections
 
 class UsersRowBinding {
 
@@ -19,8 +19,8 @@ class UsersRowBinding {
             Log.d("onUserClickListener", "CALLED")
             singleRow.setOnClickListener {
                 try {
-                    val action =
-                        FirstFragmentDirections.actionFirstFragmentToSecondFragment(users)
+                    val action = UsersListFragmentDirections
+                        .actionUsersListFragmentToUserDetailsFragment(users)
                     singleRow.findNavController().navigate(action)
                 } catch (e: Exception) {
                     Log.d("onUserClickListener", e.toString())

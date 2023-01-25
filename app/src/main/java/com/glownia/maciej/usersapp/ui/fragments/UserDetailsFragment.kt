@@ -7,23 +7,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
-import com.glownia.maciej.usersapp.databinding.FragmentSecondBinding
+import com.glownia.maciej.usersapp.databinding.FragmentUserDetailsBinding
 
 /**
  * Displays single user
  */
-class SecondFragment : Fragment() {
+class UserDetailsFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentUserDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private val args by navArgs<SecondFragmentArgs>()
+    private val args by navArgs<UserDetailsFragmentArgs>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
 
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        _binding = FragmentUserDetailsBinding.inflate(inflater, container, false)
 
         setupDetailsRow()
 
