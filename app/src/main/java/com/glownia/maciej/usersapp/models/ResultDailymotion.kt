@@ -15,7 +15,6 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class ResultDailymotion(
-    @PrimaryKey
-    @SerializedName("id") var id: String? = null,
-    @SerializedName("screenname") var screenName: String? = null,
+    @SerializedName("id") var id: String,
+    @SerializedName("screenname") var screenName: String,
 ) : Parcelable

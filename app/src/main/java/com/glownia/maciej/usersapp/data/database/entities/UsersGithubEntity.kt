@@ -13,10 +13,10 @@ class UsersGithubEntity(
     @ColumnInfo(name = "avatar_url")
     val avatarUrl: String? = null,
     @ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = false)
     val id: Int? = null,
+    @PrimaryKey
     @ColumnInfo(name = "login")
-    val login: String? = null,
+    val login: String,
     @ColumnInfo(name = "type")
     val type: String? = null,
     @ColumnInfo(name = "url")
