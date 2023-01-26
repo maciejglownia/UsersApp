@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp">
 
         <com.google.android.material.card.MaterialCardView
@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
-            app:strokeColor="@color/yellow"
+            app:strokeColor="@color/green"
             app:strokeWidth="1.5dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,34 +48,22 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@tools:sample/avatars"
+                    tools:src="@tools:sample/avatars"
                     android:contentDescription="@string/github_user_s_avatar" />
 
                 <TextView
                     android:id="@+id/username_textView"
-                    android:layout_width="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:padding="16dp"
                     android:text="@{usersGithubEntity.login}"
                     android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/avatar_imageView"
                     app:layout_constraintStart_toStartOf="@+id/avatar_imageView"
                     app:layout_constraintTop_toBottomOf="@+id/avatar_imageView"
                     tools:text="Username" />
-
-                <TextView
-                    android:id="@+id/url_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp"
-                    android:text="@{usersGithubEntity.url}"
-                    android:textSize="24sp"
-                    app:layout_constraintStart_toStartOf="@+id/username_textView"
-                    app:layout_constraintTop_toBottomOf="@+id/username_textView"
-                    tools:text="Url" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

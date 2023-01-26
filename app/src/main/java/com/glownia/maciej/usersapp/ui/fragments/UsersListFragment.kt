@@ -1,5 +1,6 @@
 package com.glownia.maciej.usersapp.ui.fragments
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.glownia.maciej.usersapp.adapters.UsersAdapter
 import com.glownia.maciej.usersapp.databinding.FragmentUsersListBinding
 import com.glownia.maciej.usersapp.ui.viewmodels.MainViewModel
@@ -59,7 +60,12 @@ class UsersListFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.adapter = myAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        // Display 2 columns when the app orientation is setup to portrait and 5 when setup to landscape
+        if (requireActivity().resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        } else {
+            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 4)
+        }
         // TODO: Show loading
     }
 
