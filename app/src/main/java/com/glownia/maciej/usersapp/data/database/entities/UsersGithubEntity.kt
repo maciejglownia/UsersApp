@@ -11,14 +11,14 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class UsersGithubEntity(
     @ColumnInfo(name = "avatar_url")
-    val avatarUrl: String?,
+    val avatarUrl: String? = null,
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = false)
-    val id: Int?,
+    val id: Int? = null,
     @ColumnInfo(name = "login")
-    val login: String?,
+    val login: String? = null,
     @ColumnInfo(name = "type")
-    val type: String?,
+    val type: String? = null,
     @ColumnInfo(name = "url")
-    val url: String?,
+    val url: String? = null,
 ) : Parcelable
