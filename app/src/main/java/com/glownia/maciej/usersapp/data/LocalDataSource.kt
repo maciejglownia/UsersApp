@@ -1,6 +1,7 @@
 package com.glownia.maciej.usersapp.data
 
 import com.glownia.maciej.usersapp.data.database.UsersDao
+import com.glownia.maciej.usersapp.data.database.entities.UserGithubDetailsEntity
 import com.glownia.maciej.usersapp.data.database.entities.UsersDailymotionEntity
 import com.glownia.maciej.usersapp.data.database.entities.UsersGithubEntity
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,10 @@ class LocalDataSource @Inject constructor(
 
     fun readUsersGithub(): Flow<List<UsersGithubEntity>> {
         return usersDao.readUsersGithub()
+    }
+
+    suspend fun insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity: UserGithubDetailsEntity) {
+        usersDao.insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity)
     }
 
     suspend fun insertUsersDailymotion(usersDailymotionEntity: UsersDailymotionEntity) {
