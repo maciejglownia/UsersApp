@@ -11,12 +11,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UsersDao {
 
+    /** users_github_table */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUsersGithub(usersGithubEntity: UsersGithubEntity)
 
     @Query("SELECT * FROM users_github_table ORDER BY id ASC")
     fun readUsersGithub(): Flow<List<UsersGithubEntity>>
 
+    /** users_dailymotion_table */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUsersDailymotion(usersDailymotionEntity: UsersDailymotionEntity)
 

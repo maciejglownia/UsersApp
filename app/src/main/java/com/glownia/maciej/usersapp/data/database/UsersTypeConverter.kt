@@ -1,6 +1,7 @@
 package com.glownia.maciej.usersapp.data.database
 
 import androidx.room.TypeConverter
+import com.glownia.maciej.usersapp.data.database.entities.UsersGithubEntity
 import com.glownia.maciej.usersapp.models.ResultGithub
 import com.glownia.maciej.usersapp.models.UsersDailymotion
 import com.google.gson.Gson
@@ -12,14 +13,14 @@ class UsersTypeConverter {
 
     // Serialization
     @TypeConverter
-    fun usersGithubToString(usersGithub: List<ResultGithub>): String {
+    fun usersGithubToString(usersGithub: List<UsersGithubEntity>): String {
         return gson.toJson(usersGithub)
     }
 
     // Deserialization  -> more: https://www.baeldung.com/kotlin/gson-parse-arrays
     @TypeConverter
-    fun stringToUsersGithub(data: String): List<ResultGithub> {
-        val listType = object : TypeToken<List<ResultGithub>>() {}.type
+    fun stringToUsersGithub(data: String): List<UsersGithubEntity> {
+        val listType = object : TypeToken<List<UsersGithubEntity>>() {}.type
         return gson.fromJson(data, listType)
     }
 

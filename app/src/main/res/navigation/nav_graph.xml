@@ -26,6 +26,6 @@
             app:destination="@id/UsersListFragment" />
         <argument
             android:name="user"
-            app:argType="com.glownia.maciej.usersapp.models.ResultGithub" />
+            app:argType="com.glownia.maciej.usersapp.data.database.entities.UsersGithubEntity" />
     </fragment>
 </navigation>

@@ -89,13 +89,20 @@ class MainViewModel @Inject constructor(
     }
 
     private fun offlineCacheUsersGithub() {
-        val usersGithub = usersGithubResponse.value!!.data
-        if (usersGithub != null) {
-            val usersGithubEntity = UsersGithubEntity(usersGithub)
+        usersGithubResponse.value!!.data?.forEach { user ->
+            val usersGithubEntity = UsersGithubEntity(
+                avatarUrl = user.avatarUrl,
+                id = user.id,
+                login = user.login,
+                type = user.type,
+                url = user.url,
+            )
+            Log.i("BooksListViewModel", "Saving user into database...")
             insertUsersGithub(usersGithubEntity)
-            Log.i("MainViewModel", "offlineCacheUsersGithub()")
+            Log.i("BooksListViewModel", "User has been saved!")
         }
     }
+
 
     private fun offlineCacheUsersDailymotion() {
         val usersDailymotion = usersDailymotionResponse.value!!.data

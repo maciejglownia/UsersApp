@@ -4,19 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.glownia.maciej.usersapp.data.database.entities.UsersGithubEntity
 import com.glownia.maciej.usersapp.databinding.SingleRowBinding
-import com.glownia.maciej.usersapp.models.ResultGithub
 import com.glownia.maciej.usersapp.utils.UsersDiffUtil
 
 class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
 
-    private var users = emptyList<ResultGithub>()
+    private var users = emptyList<UsersGithubEntity>()
 
     class MyViewHolder(private val binding: SingleRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(result: ResultGithub) {
-            binding.result = result
+        fun bind(usersGithubEntity: UsersGithubEntity) {
+            binding.usersGithubEntity = usersGithubEntity
             binding.executePendingBindings()
         }
     }
@@ -36,7 +36,7 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
         return users.size
     }
 
-    fun setData(newData: List<ResultGithub>) {
+    fun setData(newData: List<UsersGithubEntity>) {
         val usersDiffUtil =
             UsersDiffUtil(users, newData)
         val diffUtilResult = DiffUtil.calculateDiff(usersDiffUtil)

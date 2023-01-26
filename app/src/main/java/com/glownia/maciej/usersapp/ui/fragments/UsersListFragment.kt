@@ -68,7 +68,7 @@ class UsersListFragment : Fragment() {
             mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
                     Log.d("FirstFragment", "readDatabase called!")
-                    myAdapter.setData(database.first().usersGithub)
+                    myAdapter.setData(database)
                     // TODO: Hide loading
                 } else {
                     requestApiData()
@@ -108,7 +108,7 @@ class UsersListFragment : Fragment() {
         lifecycleScope.launch {
             mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    myAdapter.setData(database.first().usersGithub)
+//                    myAdapter.setData(database)
                 }
             }
         }

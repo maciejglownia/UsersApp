@@ -34,8 +34,8 @@ class UserDetailsFragment : Fragment() {
     // Sets data to display using arguments passed from item has been clicked in the Recycler View
     private fun setupDetailsRow() {
         binding.apply {
-            avatarImageView.load(args.user.avatar)
-            usernameTextView.text = args.user.username
+            avatarImageView.load(args.user.avatarUrl)
+            usernameTextView.text = args.user.login
             urlTextView.text = args.user.url
         }
     }
