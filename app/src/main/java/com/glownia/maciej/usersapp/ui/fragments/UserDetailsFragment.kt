@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.glownia.maciej.usersapp.databinding.FragmentUserDetailsBinding
 import com.glownia.maciej.usersapp.ui.viewmodels.usergithub.UserGithubViewModel
+import kotlinx.coroutines.launch
 
 /**
  * Displays single user
@@ -23,30 +24,40 @@ class UserDetailsFragment : Fragment() {
     private lateinit var userGithubViewModel: UserGithubViewModel
 
     private val args by navArgs<UserDetailsFragmentArgs>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userGithubViewModel = ViewModelProvider(requireActivity())[UserGithubViewModel::class.java]
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         _binding = FragmentUserDetailsBinding.inflate(inflater, container, false)
-        userGithubViewModel.getUserGithubDetailsFromApi(args.user.login.toString())
-
-        setupDetailsRow()
+        lifecycleScope.launchWhenStarted {
+            readDatabase()
+        }
 
         return binding.root
-
     }
 
-    // Sets data to display using arguments passed from item has been clicked in the Recycler View
-    private fun setupDetailsRow() {
-        binding.apply {
-            avatarImageView.load(args.user.avatarUrl)
-            usernameTextView.text = args.user.login
-            urlTextView.text = args.user.url
+    /**
+     * Reads data from database if it is there. In other way call API to get a new data.
+     */
+    private fun readDatabase() {
+        lifecycleScope.launch {
+            userGithubViewModel.readUserGithubByLogin(args.user.login)
+                .observe(viewLifecycleOwner) { database ->
+                    if (database != null && database.login == args.user.login) {
+                        Log.d("UserDetailsFragment", "readDatabase called!")
+                        binding.avatarImageView.load(database.avatarUrl)
+                        binding.usernameTextView.text = database.name.toString()
+                        binding.urlTextView.text = database.url.toString()
+                    } else {
+                        Log.d("UserDetailsFragment", "API call needed!")
+                    }
+                }
         }
     }
 

@@ -11,6 +11,7 @@ class LocalDataSource @Inject constructor(
     private val usersDao: UsersDao
 ) {
 
+    /** users_github_table */
     suspend fun insertUsersGithub(usersGithubEntity: UsersGithubEntity) {
         usersDao.insertUsersGithub(usersGithubEntity)
     }
@@ -19,10 +20,16 @@ class LocalDataSource @Inject constructor(
         return usersDao.readUsersGithub()
     }
 
+    /** user_github_details_table */
     suspend fun insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity: UserGithubDetailsEntity) {
         usersDao.insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity)
     }
 
+    fun readUserGithubByLogin(login: String): Flow<UserGithubDetailsEntity> {
+        return usersDao.readUserGithubByLogin(login)
+    }
+
+    /** users_dailymotion_table */
     suspend fun insertUsersDailymotion(usersDailymotionEntity: UsersDailymotionEntity) {
         usersDao.insertUsersDailymotion(usersDailymotionEntity)
     }

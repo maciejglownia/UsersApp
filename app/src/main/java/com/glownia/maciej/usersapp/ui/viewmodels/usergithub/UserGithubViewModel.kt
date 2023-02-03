@@ -2,9 +2,7 @@ package com.glownia.maciej.usersapp.ui.viewmodels.usergithub
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.glownia.maciej.usersapp.data.Repository
 import com.glownia.maciej.usersapp.data.database.entities.UserGithubDetailsEntity
 import com.glownia.maciej.usersapp.models.usergithubdetails.UserGithubDetails
@@ -30,8 +28,11 @@ class UserGithubViewModel @Inject constructor(
             repository.local.insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity)
         }
 
+    fun readUserGithubByLogin(login: String): LiveData<UserGithubDetailsEntity> =
+        repository.local.readUserGithubByLogin(login).asLiveData()
+
     /** Retrofit */
-    private val userGithubDetailsResponse: MutableLiveData<NetworkResult<UserGithubDetails>> =
+    val userGithubDetailsResponse: MutableLiveData<NetworkResult<UserGithubDetails>> =
         MutableLiveData()
 
     fun getUserGithubDetailsFromApi(login: String) {
@@ -88,20 +89,20 @@ class UserGithubViewModel @Inject constructor(
      * Entity: [UserGithubDetailsEntity]
      */
     private fun offlineCacheUserGithubDetails(userGithubDetails: UserGithubDetails) {
-            val userGithubDetailsEntity = UserGithubDetailsEntity(
-                id = userGithubDetails.id,
-                login = userGithubDetails.login,
-                name = userGithubDetails.name,
-                location = userGithubDetails.location,
-                avatarUrl = userGithubDetails.avatarUrl,
-                blog = userGithubDetails.blog,
-                company = userGithubDetails.company,
-                createdAt = userGithubDetails.createdAt,
-                type = userGithubDetails.type,
-                url = userGithubDetails.url,
-            )
-            Log.i("BookDetailsViewModel", "Saving book details into database...")
-            insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity)
-            Log.i("BookDetailsViewModel", "Book details has been saved!")
+        val userGithubDetailsEntity = UserGithubDetailsEntity(
+            id = userGithubDetails.id,
+            login = userGithubDetails.login,
+            name = userGithubDetails.name,
+            location = userGithubDetails.location,
+            avatarUrl = userGithubDetails.avatarUrl,
+            blog = userGithubDetails.blog,
+            company = userGithubDetails.company,
+            createdAt = userGithubDetails.createdAt,
+            type = userGithubDetails.type,
+            url = userGithubDetails.url,
+        )
+        Log.i("BookDetailsViewModel", "Saving book details into database...")
+        insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity)
+        Log.i("BookDetailsViewModel", "Book details has been saved!")
     }
 }

@@ -23,6 +23,9 @@ interface UsersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserGithubDetailsOfChosenUser(userGithubDetailsEntity: UserGithubDetailsEntity)
 
+    @Query("SELECT * FROM user_github_details_table WHERE login= :login")
+    fun readUserGithubByLogin(login: String): Flow<UserGithubDetailsEntity>
+
     /** users_dailymotion_table */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUsersDailymotion(usersDailymotionEntity: UsersDailymotionEntity)
