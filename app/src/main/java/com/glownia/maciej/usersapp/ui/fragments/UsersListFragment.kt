@@ -73,7 +73,7 @@ class UsersListFragment : Fragment() {
         lifecycleScope.launch {
             mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    Log.d("FirstFragment", "readDatabase called!")
+                    Log.d("UsersListFragment", "readDatabase called!")
                     myAdapter.setData(database)
                     // TODO: Hide loading
                 } else {
@@ -84,7 +84,7 @@ class UsersListFragment : Fragment() {
     }
 
     private fun requestApiData() {
-        Log.d("FirstFragment", "requestApiData called!")
+        Log.d("UsersListFragment", "requestApiData called!")
         mainViewModel.getUsersFromApis()
         mainViewModel.usersGithubResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -93,9 +93,9 @@ class UsersListFragment : Fragment() {
                     response.data?.let { myAdapter }
                 }
                 is NetworkResult.Error -> {
-                    Log.d("FirstFragment", "requestApiData error!")
+                    Log.d("UsersListFragment", "requestApiData error!")
                     // TODO: Hide loading
-                    loadDataFromCache()
+                    readDatabase()
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),
@@ -103,18 +103,8 @@ class UsersListFragment : Fragment() {
                     ).show()
                 }
                 is NetworkResult.Loading -> {
-                    Log.d("FirstFragment", "requestApiData loading...")
+                    Log.d("UsersListFragment", "requestApiData loading...")
                     // TODO: Show loading
-                }
-            }
-        }
-    }
-
-    private fun loadDataFromCache() {
-        lifecycleScope.launch {
-            mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
-                if (database.isNotEmpty()) {
-//                    myAdapter.setData(database)
                 }
             }
         }
