@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="login_fragment_label">Login</string>
-    <string name="users_list_fragment_label">Users List</string>
-    <string name="user_details_fragment_label">User Detaials</string>
+    <string name="users_list_fragment_label">Github Users</string>
+    <string name="user_details_fragment_label">User Details</string>
     <string name="github_user_s_avatar">Github user\'s avatar</string>
 </resources>

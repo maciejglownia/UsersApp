@@ -21,18 +21,20 @@
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/single_row"
             app:spanCount="2"
+            tools:listitem="@layout/single_row"
             tools:visibility="visible" />
 
-<!--        readApiResponse="@{mainViewModel.usersGithubResponse}"-->
-<!--        readDatabase="@{mainViewModel.readUsersGithub}"-->
+        <!--        readApiResponse="@{mainViewModel.usersGithubResponse}"-->
+        <!--        readDatabase="@{mainViewModel.readUsersGithub}"-->
         <ImageView
             android:id="@+id/error_imageView"
 
@@ -52,8 +54,8 @@
             app:tint="@color/grey"
             tools:visibility="visible" />
 
-<!--        readApiResponse="@{mainViewModel.usersGithubResponse}"-->
-<!--        readDatabase="@{mainViewModel.readUsersGithub}"-->
+        <!--        readApiResponse="@{mainViewModel.usersGithubResponse}"-->
+        <!--        readDatabase="@{mainViewModel.readUsersGithub}"-->
         <TextView
             android:id="@+id/error_textView"
 
