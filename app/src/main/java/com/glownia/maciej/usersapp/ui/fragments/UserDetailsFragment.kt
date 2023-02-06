@@ -13,7 +13,7 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.glownia.maciej.usersapp.data.database.entities.UserGithubDetailsEntity
 import com.glownia.maciej.usersapp.databinding.FragmentUserDetailsBinding
-import com.glownia.maciej.usersapp.ui.viewmodels.usergithub.UserGithubViewModel
+import com.glownia.maciej.usersapp.ui.viewmodels.UserGithubViewModel
 import com.glownia.maciej.usersapp.utils.NetworkResult
 import kotlinx.coroutines.launch
 

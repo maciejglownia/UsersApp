@@ -1,11 +1,11 @@
-package com.glownia.maciej.usersapp.ui.viewmodels.usergithub
+package com.glownia.maciej.usersapp.ui.viewmodels
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.glownia.maciej.usersapp.data.Repository
 import com.glownia.maciej.usersapp.data.database.entities.UserGithubDetailsEntity
-import com.glownia.maciej.usersapp.models.usergithubdetails.UserGithubDetails
+import com.glownia.maciej.usersapp.models.UserGithubDetails
 import com.glownia.maciej.usersapp.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
