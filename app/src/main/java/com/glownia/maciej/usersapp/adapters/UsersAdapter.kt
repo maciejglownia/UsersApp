@@ -12,7 +12,7 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
 
     private var users = emptyList<UsersGithubEntity>()
 
-    class MyViewHolder(private val binding: SingleRowBinding) :
+    class MyViewHolder(val binding: SingleRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(usersGithubEntity: UsersGithubEntity) {
@@ -30,6 +30,16 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentUser = users[position]
         holder.bind(currentUser)
+
+        holder.binding.rowCardView.setOnClickListener {
+            onItemClickListener?.let { it(currentUser) }
+        }
+    }
+
+    private var onItemClickListener: ((UsersGithubEntity) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (UsersGithubEntity) -> Unit) {
+        onItemClickListener = listener
     }
 
     override fun getItemCount(): Int {

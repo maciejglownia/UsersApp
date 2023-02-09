@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.glownia.maciej.usersapp.adapters.UsersAdapter
 import com.glownia.maciej.usersapp.databinding.FragmentUsersListBinding
@@ -27,19 +28,19 @@ class UsersListFragment : Fragment() {
     private var _binding: FragmentUsersListBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
     private val myAdapter by lazy { UsersAdapter() }
 
     override fun onResume() {
         super.onResume()
-        if (mainViewModel.recyclerViewState != null) {
-            binding.recyclerView.layoutManager?.onRestoreInstanceState(mainViewModel.recyclerViewState)
+        if (viewModel.recyclerViewState != null) {
+            binding.recyclerView.layoutManager?.onRestoreInstanceState(viewModel.recyclerViewState)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -48,13 +49,20 @@ class UsersListFragment : Fragment() {
     ): View {
         _binding = FragmentUsersListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.mainViewModel = mainViewModel
+        binding.mainViewModel = viewModel
 
         setupRecyclerView()
 
         lifecycleScope.launchWhenStarted {
             readDatabase()
         }
+
+        myAdapter.setOnItemClickListener {
+            val action = UsersListFragmentDirections
+                .actionUsersListFragmentToUserDetailsFragment(it)
+            findNavController().navigate(action)
+        }
+
         return binding.root
     }
 
@@ -71,9 +79,9 @@ class UsersListFragment : Fragment() {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
+            Log.d("UsersListFragment", "readDatabase called!")
+            viewModel.readUsersGithub.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    Log.d("UsersListFragment", "readDatabase called!")
                     myAdapter.setData(database)
                     // TODO: Hide loading
                 } else {
@@ -85,17 +93,16 @@ class UsersListFragment : Fragment() {
 
     private fun requestApiData() {
         Log.d("UsersListFragment", "requestApiData called!")
-        mainViewModel.getUsersFromApis()
-        mainViewModel.usersGithubResponse.observe(viewLifecycleOwner) { response ->
+        viewModel.getUsersFromApis()
+        viewModel.usersGithubResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
+                    Log.d("UsersListFragment", "network result successful")
                     // TODO: Hide loading
-                    response.data?.let { myAdapter }
                 }
                 is NetworkResult.Error -> {
                     Log.d("UsersListFragment", "requestApiData error!")
                     // TODO: Hide loading
-                    readDatabase()
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),
@@ -112,7 +119,7 @@ class UsersListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mainViewModel.recyclerViewState =
+        viewModel.recyclerViewState =
             binding.recyclerView.layoutManager?.onSaveInstanceState()
         _binding = null
     }

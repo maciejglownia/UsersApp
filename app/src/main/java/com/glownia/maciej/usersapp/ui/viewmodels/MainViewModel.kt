@@ -97,9 +97,7 @@ class MainViewModel @Inject constructor(
                 type = user.type,
                 url = user.url,
             )
-            Log.i("BooksListViewModel", "Saving user into database...")
             insertUsersGithub(usersGithubEntity)
-            Log.i("BooksListViewModel", "User has been saved!")
         }
     }
 
@@ -112,7 +110,6 @@ class MainViewModel @Inject constructor(
                     screenName = user.screenName
                 )
             insertUsersDailymotion(usersDailymotionEntity)
-            Log.i("MainViewModel", "offlineCacheUsersDailymotion()")
         }
     }
 
